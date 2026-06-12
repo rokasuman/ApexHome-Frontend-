@@ -2,7 +2,7 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 import axios from "axios";
 import API_URL from "../config";
 import { useNavigate } from "react-router-dom";
-import { response } from "express";
+
 
 const AuthContext = createContext();
 
@@ -25,7 +25,7 @@ export const AuthProvider = ({ children }) => {
     const interceptor = axios.interceptors.response.use(
       (response) => response,
       (error) => {
-        if (error.response && error.data.response.message.includes("blocked")) {
+        if (error.response && error.data?.response?.message.includes("blocked")) {
           logout();
         }
         return Promise.reject(error);
@@ -109,10 +109,16 @@ export const AuthProvider = ({ children }) => {
   };
 
   const value = {
-    user,
-    setUser,
-    token,
-    setToken,
+  user,
+  setUser,
+  token,
+  setToken,
+  login,
+  register,
+  logout,
+  refreshUser,
+  loading,
+
   };
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
