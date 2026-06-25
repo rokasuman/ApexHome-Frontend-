@@ -2,7 +2,9 @@ import { useState } from "react";
 import { navbarStyles as s } from "../assets/REAL-E-STATE/dummyStyles";
 import Logo from "./Logo";
 import { authUse } from "../../context/AuthContext.jsx";
-import { Link } from "react-router-dom"; 
+import { Link } from "react-router-dom";
+import { HiX } from "react-icons/hi";
+import { HiMenuAlt3 } from "react-icons/hi";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -103,82 +105,74 @@ const Navbar = () => {
   );
 
   return (
-  <>
-  <nav className={s.nav}>
-  <div className={s.container}>
-    <div className="flex justify-between items-center">
-      {/* Logo */}
-      <div className="justify-self-start">
-        <Logo />
-      </div>
+    <>
+      <nav className={s.nav}>
+        <div className={s.container}>
+          <div className="flex justify-between items-center">
+            {/* Logo */}
+            <div className="justify-self-start">
+              <Logo />
+            </div>
 
-      {/* Desktop Menu */}
-      <div className={s.desktopMenu}>
-        {navLink}
-      </div>
+            {/* Desktop Menu */}
+            <div className={s.desktopMenu}>{navLink}</div>
 
-      {/* User Section */}
-      <div>
-        {user ? (
-          <Link to="/profile" className="flex items-center">
-            <img
-              src={
-                user.profilePic ||
-                `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=0d6e59&color=fff`
-              }
-              alt="Profile"
-              className={s.avatar}
-            />
-            <button onClick={logout} className={s.logoutButton}>
-              Logout
-            </button>
-          </Link>
-        ) : null}
-      </div>
+            {/* User Section */}
+            <div>
+              {user ? (
+                <Link to="/profile" className="flex items-center">
+                  <img
+                    src={
+                      user.profilePic ||
+                      `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=0d6e59&color=fff`
+                    }
+                    alt="Profile"
+                    className={s.avatar}
+                  />
+                  <button onClick={logout} className={s.logoutButton}>
+                    Logout
+                  </button>
+                </Link>
+              ) : null}
+            </div>
 
-      {/* Mobile Toggle Button  */}
-      <div className={s.mobileToggle} onClick={toggleMenu}>
-        ☰ 
-      </div>
-    </div>
-  </div>
-
-  {/* Mobile Backdrop */}
-  <div className={s.backdrop(isOpen)} onClick={toggleMenu}></div>
-
-  {/* Mobile Drawer */}
-  <div className={s.drawer(isOpen)}>
-    <div className={s.drawerHeader}>
-      <div className="text-xl font-semibold">Menu</div>
-      <div className={s.drawerCloseIcon} onClick={toggleMenu}>
-        ✕
-      </div>
-    </div>
-    <div className={s.drawerNavLinks}>
-      {navLink}
-    </div>
-    {user && (
-      <div className={s.drawerUserSection}>
-        <div className={s.drawerUserInfo}>
-          <img
-            src={
-              user.profilePic ||
-              `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=0d6e59&color=fff`
-            }
-            alt="User Avatar"
-            className={s.drawerAvatar}
-          />
-          <div className={s.drawerUserName}>{user.name}</div>
-          <div className={s.drawerUserEmail}>{user.email}</div>
+            {/* Mobile Toggle Button  */}
+            <div className={s.mobileToggle} onClick={toggleMenu}>
+              {isOpen ? <HiX size={28} /> : <HiMenuAlt3 size={28} />}
+            </div>
+          </div>
         </div>
-        <button className={s.drawerLogoutButton} onClick={logout}>
-          Logout
-        </button>
-      </div>
-    )}
-  </div>
-</nav>
-  </>
+
+        {/* Mobile Drawer */}
+        <div className={s.drawer(isOpen)}>
+          <div className={s.drawerHeader}>
+            <div>
+              <Logo />
+            </div>
+          </div>
+          <div className={s.drawerNavLinks}>{navLink}</div>
+          {user && (
+            <div className={s.drawerUserSection}>
+              <div className={s.drawerUserInfo}>
+                <img
+                  src={
+                    user.profilePic ||
+                    `https://ui-avatars.com/api/?name=${user.name}&background=0d6e59&color=fff`
+                  }
+                  alt="User Avatar"
+                  className={s.drawerAvatar}
+                />
+                <div className={s.drawerUserName}>{user.name}</div>
+                <div className={s.drawerUserEmail}>{user.email}</div>
+              </div>
+            </div>
+          )}
+        </div>
+      </nav>
+      <button className={s.drawerLogoutButton} onClick={logout}>
+        Logout
+      </button>
+    </>
   );
 };
 
