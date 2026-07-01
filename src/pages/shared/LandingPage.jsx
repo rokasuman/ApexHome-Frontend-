@@ -1,124 +1,263 @@
-import  { useEffect, useState } from 'react'
-import { landingPageStyles as s } from '../../assets/REAL-E-STATE/dummyStyles'
-import Navbar from '../../components/Navbar.jsx'
-import { HiLocationMarker } from 'react-icons/hi'
-import { useNavigate } from 'react-router-dom'
-import { authUse } from '../../../context/AuthContext.jsx'
-import axios from 'axios'
-import API_URL from '../../../config.js'
+import { useEffect, useState } from "react";
+import { landingPageStyles as s } from "../../assets/REAL-E-STATE/dummyStyles";
+import Navbar from "../../components/Navbar.jsx";
+import banner from "../../assets/REAL-E-STATE/bannerimage.png"
+import {
+  HiCurrencyDollar,
+  HiHome,
+  HiLightningBolt,
+  HiLocationMarker,
+  HiOfficeBuilding,
+  HiSearch,
+  HiShieldCheck,
+  HiVideoCamera,
+} from "react-icons/hi";
+import { useNavigate } from "react-router-dom";
+import { authUse } from "../../../context/AuthContext.jsx";
+import axios from "axios";
+import API_URL from "../../../config.js";
 
 const LandingPage = () => {
+  const [properties, setProperties] = useState([]);
+  const [wishList, setWishList] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [propertyType, setPropertyType] = useState("Select Type");
+  const [propertyCounts, setPropertyCounts] = useState({
+    flat: 0,
+    villa: 0,
+    penthouse: 0,
+    commercial: 0,
+  });
+  const navigate = useNavigate();
+  const { user, token } = authUse();
 
-  const [wishList, setWishList] = useState([])
-  const [searchTerm, setSearchTerm] = useState("")
-  const [loading,setLoading] = useState(true)
-  const [error,setError] = useState(null)
-  const [propertyType,setPropertyType] = useState("select Type")
-  const [propertyCount, setPropertyCount] = useState({
-    flat : 0,
-    villa : 0,
-    penthouse :0,
-    commerical: 0,
-  })
-   const navigate = useNavigate()
-    const {user,token} = authUse()
- 
-  const handleSearch = (e) => {
-    e.preventDefault()
-   
-  
-  }
-  //to fetech the wish list 
-const fetchWishList = async () => {
-  try {
-    const res = await axios.get(`${API_URL}/api/wishlist`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
+  //to fetech the wish list
+  const fetchWishList = async () => {
+    try {
+      const res = await axios.get(`${API_URL}/api/wishlist`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
 
-    setWishList(
-      res.data
-        .filter((item) => item.property)
-        .map((item) => String(item.property._id))
-    );
-  } catch (error) {
-    console.log("fail to fetch the wishlist", error);
-  }
-};
-//remove the wishlist 
-const handleToggleWishList = async(propertyId) =>{
-  try {
-    const isWishListed = wishList.includes(propertyId);
-    if(isWishListed){
-    await axios.delete(`${API_URL}/api/wishlist/${propertyId}`,{
-      headers:  { Authorization: `Bearer ${token}` },
-    });
-       setWishList((prev) =>
-      prev.filter((id) => id !== propertyId)
-    );
-  }else{
-    await axios.post(`${API_URL}/api/wishlist/${propertyId}`,{}, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    setWishList((prev)=>[...prev, propertyId])
-  }
-  } catch (error) {
-    console.log("Fail to toggle the wishList:",error)
-  }
-}
-
-  useEffect(()=>{
-      fetchProperties();
-      fetchCount();
-      if(user){
-        fetchWishList()
+      setWishList(
+        res.data
+          .filter((item) => item.property)
+          .map((item) => String(item.property._id)),
+      );
+    } catch (error) {
+      console.log("fail to fetch the wishlist", error);
+    }
+  };
+  //remove the wishlist
+  const handleToggleWishList = async (propertyId) => {
+    try {
+      const isWishListed = wishList.includes(propertyId);
+      if (isWishListed) {
+        await axios.delete(`${API_URL}/api/wishlist/${propertyId}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setWishList((prev) => prev.filter((id) => id !== propertyId));
+      } else {
+        await axios.post(
+          `${API_URL}/api/wishlist/${propertyId}`,
+          {},
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          },
+        );
+        //add the wishlist
+        setWishList((prev) => [...prev, propertyId]);
       }
-    },[user])
+    } catch (error) {
+      console.log("Fail to toggle the wishList:", error);
+    }
+  };
+  const fetchCount = async () => {
+    try {
+      const res = await axios.get(`${API_URL}/api/property/count`);
+      if (res.data.success) {
+        setPropertyCounts(res.data.counts);
+      }
+    } catch (error) {
+      console.log("Faild to fetch the properties", error);
+    }
+  };
+
+  //fetch the properties
+  const fetchProperties = async (search = "") => {
+    try {
+      setLoading(true);
+      const res = await axios.get(`${API_URL}/api/property?city=${search}`);
+      setProperties(res.data.properties || res.data || []);
+      setError(null);
+    } catch (error) {
+      console.log("Failed to fetch the properties", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+  //for search
+  const handleSearch = async (e) => {
+    e.preventDefault();
+
+    const params = new URLSearchParams();
+    if (searchTerm) params.append("city", searchTerm);
+    if (propertyType !== "Select Type") params.append("type", propertyType);
+    navigate(`/properties?${params.toString()}`);
+  };
+
+  const categories = [
+    {
+      name: "Modern Flats",
+      count: propertyCounts.flat || 0,
+      icon: <HiOfficeBuilding size={32} />,
+      type: "flat",
+    },
+    {
+      name: "Luxury Villas",
+      count: propertyCounts.villa || 0,
+      icon: <HiHome size={32} />,
+      type: "villa",
+    },
+    {
+      name: "Penthouse",
+      count: propertyCounts.penthouse || 0,
+      icon: <HiOfficeBuilding size={32} />,
+      type: "penthouse",
+    },
+    {
+      name: "Commercial",
+      count: propertyCounts.commercial || 0,
+      icon: <HiOfficeBuilding size={32} />,
+      type: "commercial",
+    },
+  ];
+
+  const features = [
+    {
+      title: "Verified Trust",
+      desc: "Every listing is strictly audited for ownership, condition, and legality.",
+      icon: <HiShieldCheck size={24} />,
+    },
+    {
+      title: "Smart Search",
+      desc: "Our AI-driven algorithms help you find the best matches based on preferences.",
+      icon: <HiLightningBolt size={24} />,
+    },
+    {
+      title: "Best Value",
+      desc: "Direct-from-owner listings and zero-commission options to ensure competitive prices.",
+      icon: <HiCurrencyDollar size={24} />,
+    },
+    {
+      title: "Virtual Tours",
+      desc: "High-definition 3D tours allow you to experience the property from home.",
+      icon: <HiVideoCamera size={24} />,
+    },
+  ];
+
+  useEffect(() => {
+    fetchProperties();
+    fetchCount();
+    if (user) {
+      fetchWishList();
+    }
+  }, [user]);
 
   return (
     <div className={s.bgMain}>
-        <Navbar/>
-        {/*here section*/}
-        <section className={s.heroSection}>
-          <div className={s.heroContent}>
-            <span className={s.badge}>Trusted by 5000+ homeowners</span>
-            <h1 className={s.heroTitle}>
-              Find Your <span className={s.textGradient}>Perfect</span> Next Chapter
-            </h1>
-            <p className={s.heroSubtitle}>
-              Experience the most advanced real estate search platform. Discover verified listigs, connect with top agents and find a place you love.
-            </p>
+      <Navbar />
+      {/*here section*/}
+      <section className={s.heroSection}>
+        <div className={s.heroContent}>
+          <span className={s.badge}>Trusted by 5000+ homeowners</span>
+          <h1 className={s.heroTitle}>
+            Find Your <span className={s.textGradient}>Perfect</span> Next
+            Chapter
+          </h1>
+          <p className={s.heroSubtitle}>
+            Experience the most advanced real estate search platform. Discover
+            verified listigs, connect with top agents and find a place you love.
+          </p>
 
-            <form onSubmit={handleSearch} className={s.searchForm}>
-              <div className={s.searchField}>
+          <form onSubmit={handleSearch} className={s.searchForm}>
+            <div className={s.searchField}>
+              <div className={s.textPrimary}>
+                <HiLocationMarker size={26} />
+              </div>
+              <div className={s.flexCol}>
+                <label className={s.labelSmall}>Location</label>
+                <input
+                  type="text"
+                  placeholder="Where are you looking?"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className={s.inputTransparent}
+                />
+              </div>
+            </div>
+            <div className={s.searchDivider}></div>
+            <div className={s.searchField}>
                 <div className={s.textPrimary}>
-                  <HiLocationMarker size={26} />
+                  <HiHome size={26}/>
                 </div>
                 <div className={s.flexCol}>
-                  <label className={s.labelSmall}>Location</label>
-                  <input 
-                  type='text'
-                  placeholder='Where are you looking?'
-                  value={searchTerm}
-                  onChange={(e)=>setSearchTerm(e.target.value)}
-                  className={s.inputTransparent}
-                  />
-
+                  <label className={s.labelSmall}>Properties Types</label>
+                  <select
+                   value={propertyType}
+                  onChange={(e) => setPropertyType(e.target.value)}
+                  className={`${s.inputTransparent} cursor-pointer`}
+                >
+                  <option value="Select Type">Select Type</option>
+                  <option value="flat">Flat/Apartment</option>
+                  <option value="villa">Villa/House</option>
+                  <option value="penthouse">Penthouse</option>
+                  <option value="commercial">Commercial</option>
+                </select>
                 </div>
-
-              </div>
-
-              
-            </form>
-
+            </div>
+            <button className={s.searchButton} type="submit">
+              <HiSearch size={26}/>
+            </button>
+          </form>
+          <div className={s.statsContainer}>
+            <div className={s.statItemFlex}>
+              <h3 className={s.statNumber}>5K+</h3>
+              <p className={s.statLabel}>Properties Ready</p>
+            </div>
+            <div className={s.statItemBorder}>
+                <h3 className={s.statNumber}>100+</h3>
+              <p className={s.statLabel}>Agent Network</p>
+            </div>
+            <div className={s.statItemBorder}>
+                <h3 className={s.statNumber}>4.8/5</h3>
+              <p className={s.statLabel}>User Rating</p>
+            </div>
 
           </div>
+        </div>
+        <div className={s.heroImageContainer}>
+          <div className={s.imageWrapper}>
+              <img className={s.heroImage} src={banner} alt="banner"/>
 
-        </section>
-          
-
-        
+              <div className={s.verifiedBadge}>
+                <div className={s.badgeIconWrapper}>
+                  <HiShieldCheck size={24} className=" text-primary" />
+                </div>
+                <div>
+                  <h4 className={s.badgeTitle}></h4>
+                  <p className={s.badgeText}>
+                    Inspected by our professional team 
+                  </p>
+                </div>
+                <span className={s.preApproved}>Approved</span>
+              </div>
+          </div>
+        </div>
+      </section>
     </div>
-  )
-}
+  );
+};
 
-export default LandingPage
+export default LandingPage;
