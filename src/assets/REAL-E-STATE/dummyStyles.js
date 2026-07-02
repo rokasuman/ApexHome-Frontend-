@@ -667,20 +667,35 @@ export const landingPageStyles = {
   preApproved: "badge bg-primary/10 text-primary text-[0.625rem]",
 
   // Category section
-  categorySection: "py-24 bg-bg-alt",
-  categoryHeader:
-    "category-header flex justify-between items-end mb-12 max-sm:flex-col max-sm:items-start max-sm:gap-6",
-  categoryHeaderText: "max-w-[500px]",
-  categoryTitle: "text-[2.5rem] font-extrabold mb-4 max-sm:text-[2rem]",
-  categoryDesc: "text-text-muted",
-  categoryGrid:
-    "category-grid grid grid-cols-[repeat(auto-fit,minmax(240px,1fr))] gap-6 max-sm:grid-cols-2 max-sm:gap-4",
-  categoryCard:
-    "category-card py-10 px-6 text-center cursor-pointer bg-white rounded-3xl border border-[#e2e8f0] transition-all duration-300 shadow-[0_4px_6px_-1px_rgba(0,0,0,0.05)] hover:-translate-y-2 hover:border-primary hover:shadow-[0_12px_25px_-5px_rgba(13,148,136,0.1)] group max-sm:py-6 max-sm:px-4",
-  categoryIconWrapper:
-    "category-icon-wrapper w-16 h-16 bg-primary-light text-primary rounded-[1.25rem] flex items-center justify-center mx-auto mb-6 transition-all duration-300 group-hover:bg-primary group-hover:text-white group-hover:scale-110 max-sm:w-12 max-sm:h-12 max-sm:mb-4 max-sm:rounded-2xl",
-  categoryName: "mb-2 text-xl font-bold max-sm:text-base",
-  categoryCount: "text-text-muted text-[0.875rem]",
+
+categorySection: "py-20 bg-bg-alt",
+
+categoryHeader:
+  "flex justify-center mb-10",
+
+categoryHeaderText:
+  "max-w-xl text-center text-xl ",
+
+categoryTitle:
+  "text-xl font-extrabold mb-3 max-sm:text-3xl",
+
+categoryDesc:
+  "text-text-muted text-base",
+
+categoryGrid:
+  "grid grid-cols-[repeat(auto-fit,minmax(180px,1fr))] gap-5 max-w-5xl mx-auto",
+
+categoryCard:
+  "py-6 px-4 text-center cursor-pointer bg-white rounded-2xl border border-[#e2e8f0] transition-all duration-300 shadow-sm hover:-translate-y-2 hover:border-primary hover:shadow-lg group",
+
+categoryIconWrapper:
+  "w-12 h-12 bg-primary-light text-primary rounded-xl flex items-center justify-center mx-auto mb-3 transition-all duration-300 group-hover:bg-primary group-hover:text-white group-hover:scale-105",
+
+categoryName:
+  "text-lg font-semibold mb-1",
+
+categoryCount:
+  "text-sm text-text-muted",
 
   // Features section
   featuresSection: "py-32",
@@ -703,21 +718,36 @@ export const landingPageStyles = {
     "inline-block mt-12 text-primary font-semibold border-b-2 hover:text-primary-dark",
 
   // How It Works section
-  processSection: "py-32 bg-bg-main",
-  processHeader: "text-center mb-20",
-  processBadge: "badge bg-primary/10 text-primary mb-4 inline-block",
-  processTitle: "text-5xl mb-6 max-sm:text-4xl text-text-main font-extrabold",
-  processSubtitle: "text-text-muted max-w-[600px] mx-auto text-lg",
-  processGrid:
-    "process-grid grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-12 relative max-md:gap-14",
-  processCard:
-    "process-card py-12 px-8 bg-white/40 backdrop-blur-md rounded-[2rem] border border-white/50 relative transition-all duration-300 text-center hover:-translate-y-2 hover:bg-white hover:shadow-[0_20px_40px_rgba(0,0,0,0.06)] hover:border-primary-light",
-  stepNumber:
-    "absolute -top-6 left-1/2 -translate-x-1/2 w-16 h-16 bg-primary text-white rounded-[1.5rem] flex items-center justify-center text-2xl font-extrabold shadow-[0_8px_20px_rgba(13,148,136,0.3)]",
-  processIconWrapper:
-    "w-20 h-20 bg-primary-light text-primary rounded-[2rem] flex items-center justify-center mx-auto mt-4 mb-8",
-  processCardTitle: "text-[1.5rem] mb-4 font-bold",
-  processCardDesc: "text-text-muted leading-[1.7]",
+processSection: "py-32 bg-gradient-to-b from-bg-main to-bg-alt",
+
+processHeader: "text-center mb-20",
+
+processBadge:
+  "px-4 py-1.5 rounded-full bg-primary/10 text-primary border border-primary/20 mb-4 inline-block text-sm font-medium",
+
+processTitle:
+  "text-5xl mb-6 max-sm:text-4xl text-text-main font-extrabold tracking-tight",
+
+processSubtitle:
+  "text-text-muted max-w-[650px] mx-auto text-lg leading-relaxed",
+
+processGrid:
+  "grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-10 relative",
+
+processCard:
+  "relative py-12 px-8 rounded-[2rem] bg-white/60 backdrop-blur-xl border border-white/40 shadow-sm transition-all duration-300 text-center hover:-translate-y-3 hover:shadow-[0_25px_60px_rgba(0,0,0,0.12)] hover:border-primary/40 hover:bg-white/80 before:absolute before:inset-0 before:rounded-[2rem] before:p-[1px] before:bg-gradient-to-br before:from-primary/30 before:to-transparent before:-z-10",
+
+stepNumber:
+  "absolute -top-6 left-1/2 -translate-x-1/2 w-16 h-16 bg-gradient-to-br from-primary to-primary/70 text-white rounded-2xl flex items-center justify-center text-xl font-bold shadow-lg ring-4 ring-white",
+
+processIconWrapper:
+  "w-20 h-20 bg-gradient-to-br from-primary/10 to-primary/5 text-primary rounded-2xl flex items-center justify-center mx-auto mt-4 mb-8 border border-primary/20",
+
+processCardTitle:
+  "text-xl mb-4 font-bold text-text-main",
+
+processCardDesc:
+  "text-text-muted leading-[1.7]",
 
   // Featured Collections section
   featuredSection: "py-24 bg-bg-alt",
