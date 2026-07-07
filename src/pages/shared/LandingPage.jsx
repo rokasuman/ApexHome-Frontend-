@@ -7,7 +7,9 @@ import {
   HiHome,
   HiLightningBolt,
   HiLocationMarker,
+  HiMail,
   HiOfficeBuilding,
+  HiPhone,
   HiSearch,
   HiShieldCheck,
   HiVideoCamera,
@@ -16,6 +18,13 @@ import { useNavigate } from "react-router-dom";
 import { authUse } from "../../../context/AuthContext.jsx";
 import axios from "axios";
 import API_URL from "../../../config.js";
+import PropertyCard from "../../components/PropertyCard.jsx";
+import {
+  FaFacebookF,
+  FaInstagram,
+  FaLinkedinIn,
+  FaTwitter,
+} from "react-icons/fa";
 
 const LandingPage = () => {
   const [properties, setProperties] = useState([]);
@@ -378,9 +387,156 @@ const LandingPage = () => {
         </div>
       </section>
       {/*feature section */}
-      <section>
-        
+      <section className={s.featuredSection}>
+        <div className={s.container}>
+          <div className={s.featuresContainer}>
+            <span className={s.featuredBadge}>HandPick for You</span>
+            <h2 className={s.featureTitle}>Feature Collection</h2>
+            <p className={s.featuredSubtitle}>
+              Discover high-value properties curated by our experts for their
+              exceptional design, location, and investment potential.
+            </p>
+          </div>
+          {loading ? (
+            <div className={s.loadingContainer}>
+              <div className={s.loader}></div>
+            </div>
+          ) : error ? (
+            <div className={s.errorContainer}>
+              <p>{error}</p>
+            </div>
+          ) : (
+            <div className={s.propertiesGrid}>
+              {properties
+                .filter((p) => p)
+                .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+                .slice(0, 6)
+                .map((property) => (
+                  <PropertyCard
+                    key={property._id}
+                    property={property}
+                    isWishlisted={wishList.includes(String(property._id))}
+                    onToggleWishlist={handleToggleWishList}
+                  />
+                ))}
+            </div>
+          )}
+          <div className={s.discoverButtonContainer}>
+            <button
+              onClick={() => navigate("/properties")}
+              className={s.discoverButton}
+            >
+              Discover More Properties
+            </button>
+          </div>
+        </div>
       </section>
+      <footer className={s.footer}>
+        <div className={s.container}>
+          <div className={s.footerMainGrid}>
+            <div className={s.footerBrand}>
+              <div className={s.brandLogo}>
+                <div className={s.brandIcon}>AH</div>
+                Apex Home
+              </div>
+              <p className={s.brandDesc}>
+                The most trusted Platfrom to buy and rent the Properties in
+                Sydeny. We make properties hunting seamless.
+              </p>
+              <div>
+                <div className={s.socialIcons}>
+                  {[FaFacebookF, FaTwitter, FaInstagram, FaLinkedinIn].map(
+                    (Icon, idx) => (
+                      <a href="#" key={idx} className={s.socialIcon}>
+                        <Icon size={16} />
+                      </a>
+                    ),
+                  )}
+                </div>
+              </div>
+            </div>
+            <div>
+              <h4 className={s.footerHeading}>Company</h4>
+              <ul className={s.footerLinks}>
+                <li>
+                  <a href="/" className={s.footerLink}>
+                    Home
+                  </a>
+                </li>
+                <li>
+                  <a href="/properties" className={s.footerLink}>
+                    Property
+                  </a>
+                </li>
+                <li>
+                  <a href="/wishlist" className={s.footerLink}>
+                    Wishlist
+                  </a>
+                </li>
+                <li>
+                  <a href="/contact" className={s.footerLink}>
+                    Contact
+                  </a>
+                </li>
+              </ul>
+            </div>
+
+            {/* Column 3: Contact Info */}
+            <div>
+              <h4 className={s.footerHeading}>Support</h4>
+              <ul className={s.footerLinks}>
+                <li className={s.contactInfo}>
+                  <HiMail className="text-primary text-xl" />{" "}
+                  contact@apexhome.com
+                </li>
+                <li className={s.contactInfo}>
+                  <HiPhone className="text-primary text-xl" /> +61 414***
+                </li>
+                <li className={s.contactInfoStart}>
+                  <HiLocationMarker
+                    className={`text-primary ${s.contactIcon}`}
+                  />
+                  1/55 DartBrook, Auburn, Sydney, Australai
+                </li>
+              </ul>
+            </div>
+
+            <div>
+              <h4 className={s.footerHeading}>Newsletter </h4>
+              <p className={s.newsletterDesc}>
+                Subscribe to get the latest listing and market insights directly
+                in your inbox
+              </p>
+              <div className={s.newsletterInputWrapper}>
+                <input
+                  type="email"
+                  placeholder="Enter Your Email"
+                  className={s.newsletterInput}
+                />
+                <button className={s.newsletterButton}>Join now</button>
+              </div>
+            </div>
+          </div>
+          <div className={s.bottomBar}>
+            <div className={s.bottomBarFlex}>
+              <p>
+                &copy; {new Date().getFullYear()} Apex Home. All right reserved.
+              </p>
+              <div className={s.footerLegalLinks}>
+                <a href="#" className={s.footerLink}>
+                  Privacy Policy
+                </a>
+                <a href="#" className={s.footerLink}>
+                  Terms & Condtions
+                </a>
+                <a href="#" className={s.footerLink}>
+                  Cookies Setting
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 };
