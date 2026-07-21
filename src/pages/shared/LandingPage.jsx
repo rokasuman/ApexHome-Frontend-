@@ -177,7 +177,7 @@ const LandingPage = () => {
   return (
     <div className={s.bgMain}>
       <Navbar />
-      {/*here section*/}
+      {/*hero section*/}
       <section className={s.heroSection}>
         <div className={s.heroContent}>
           <span className={s.badge}>Trusted by 5000+ homeowners</span>

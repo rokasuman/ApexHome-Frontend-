@@ -129,6 +129,7 @@ const Navbar = () => {
                     alt="Profile"
                     className={s.avatar}
                   />
+                  
                   <button onClick={logout} className={s.logoutButton}>
                     Logout
                   </button>
@@ -164,14 +165,21 @@ const Navbar = () => {
                 />
                 <div className={s.drawerUserName}>{user.name}</div>
                 <div className={s.drawerUserEmail}>{user.email}</div>
+
+                <button
+                  className={s.drawerLogoutButton}
+                  onClick={() => {
+                    logout();
+                    setIsOpen(false);
+                  }}
+                >
+                  Logout
+                </button>
               </div>
             </div>
           )}
         </div>
       </nav>
-      <button className={s.drawerLogoutButton} onClick={logout}>
-        Logout
-      </button>
     </>
   );
 };
